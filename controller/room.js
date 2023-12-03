@@ -22,6 +22,7 @@ const getRoom = async (req, res, next) => {
               },
             ],
           },
+          metadata: [{ $count: "total" }, { $addFields: { page, perPage } }],
         },
       ],
       { new: true }
