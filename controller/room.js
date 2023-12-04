@@ -1,4 +1,5 @@
 const roomModel = require("../model/roomModel");
+const { search } = require("../routes/roomRoute");
 
 const getRoom = async (req, res, next) => {
   try {
@@ -12,6 +13,12 @@ const getRoom = async (req, res, next) => {
     const rooms = await roomModel.aggregate(
       [
         {
+          $match: {
+            home_name: RegExp(search, "i"),
+            address: RegExp(search, "i"),
+          },
+        },
+        {
           $facet: {
             data: [
               {
@@ -21,8 +28,8 @@ const getRoom = async (req, res, next) => {
                 $limit: limit,
               },
             ],
+            metadata: [{ $count: "total" }, { $addFields: { page, perPage } }],
           },
-          metadata: [{ $count: "total" }, { $addFields: { page, perPage } }],
         },
       ],
       { new: true }
