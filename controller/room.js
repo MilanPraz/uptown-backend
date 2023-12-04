@@ -1,5 +1,4 @@
 const roomModel = require("../model/roomModel");
-const { search } = require("../routes/roomRoute");
 
 const getRoom = async (req, res, next) => {
   try {
@@ -14,7 +13,7 @@ const getRoom = async (req, res, next) => {
       [
         {
           $match: {
-            address: RegExp(search, "i"),
+            address: RegExp(address, "i"),
           },
         },
         {
