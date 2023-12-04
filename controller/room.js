@@ -14,7 +14,6 @@ const getRoom = async (req, res, next) => {
       [
         {
           $match: {
-            home_name: RegExp(search, "i"),
             address: RegExp(search, "i"),
           },
         },
