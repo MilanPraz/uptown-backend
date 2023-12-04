@@ -3,6 +3,7 @@ const roomModel = require("../model/roomModel");
 const getRoom = async (req, res, next) => {
   try {
     console.log("hello");
+    let address = req.query.address || "";
     const page = Number(req.query.page) || 1;
     const perPage = Number(req.query.perPage) || 6;
 
@@ -13,7 +14,7 @@ const getRoom = async (req, res, next) => {
       [
         {
           $match: {
-            address: RegExp(address, "i"),
+            address: new RegExp(address, "i"),
           },
         },
         {
