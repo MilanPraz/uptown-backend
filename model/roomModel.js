@@ -50,7 +50,7 @@ const roomSchema = new schema({
     required: true,
   },
   basement: {
-    type: Boolean,
+    type: String,
     required: true,
   },
   water: {

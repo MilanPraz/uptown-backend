@@ -45,7 +45,7 @@ const postRoom = async (req, res, next) => {
     // res.send(req.body);
     const room = await roomModel.create({
       ...req.body,
-      image: req.file.filename,
+      image: req.file?.filename,
       created_by: req.user.user._id,
     });
     return res.status(200).send(room);
@@ -139,7 +139,7 @@ const deleteRoom = async (req, res, next) => {
         return res.status(200).send(deletedRoom);
       }
     } else {
-      return res.status(401).send({ msg: "Job Not Found" });
+      return res.status(401).send({ msg: "Property Not Found" });
     }
   } catch (err) {
     next(err);
