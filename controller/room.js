@@ -46,6 +46,7 @@ const postRoom = async (req, res, next) => {
     const room = await roomModel.create({
       ...req.body,
       image: req.file.filename,
+      created_by: req.user.user._id,
     });
     return res.status(200).send(room);
   } catch (err) {
@@ -127,4 +128,58 @@ const updateReview = async (req, res, next) => {
   }
 };
 
-module.exports = { getRoom, postRoom, getRoomById, updateReview };
+const deleteRoom = async (req, res, next) => {
+  try {
+    let room = await roomModel.findById(req.params.id);
+    if (room) {
+      if (req.user.user._id !== room.created_by.toString()) {
+        return res.status(401).send({ msg: "Access Denied" });
+      } else {
+        let deletedRoom = await roomModel.findByIdAndDelete(req.params.id);
+        return res.status(200).send(deletedRoom);
+      }
+    } else {
+      return res.status(401).send({ msg: "Job Not Found" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+const editRoom = async (req, res, next) => {
+  try {
+    let room = await roomModel.findById(req.params.id);
+
+    if (room) {
+      room = room.toObject();
+      if (req.user.user._id !== room.created_by.toString()) {
+        return res
+          .status(401)
+          .send({ msg: "This Room is not Created by You!!" });
+      } else {
+        let updatedRoom = await roomModel.findByIdAndUpdate(
+          req.params.id,
+          {
+            ...req.body,
+            image: req.file?.filename,
+          },
+          { new: true, runValidators: true }
+        );
+        res.status(200).send(updatedRoom);
+      }
+    } else {
+      return res.status(401).send({ msg: "No such room found" });
+    }
+  } catch (err) {
+    next(err);
+  }
+};
+
+module.exports = {
+  getRoom,
+  postRoom,
+  getRoomById,
+  updateReview,
+  deleteRoom,
+  editRoom,
+};

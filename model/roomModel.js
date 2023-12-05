@@ -95,6 +95,10 @@ const roomSchema = new schema({
     ref: "agents",
     type: ObjectId,
   },
+  created_by: {
+    ref: "users",
+    type: ObjectId,
+  },
 });
 
 const roomModel = mongoose.model("room", roomSchema);
